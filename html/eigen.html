@@ -1,0 +1,244 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>eigen</title><meta name="generator" content="MATLAB 9.12"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2022-06-08"><meta name="DC.source" content="eigen.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%n = input('Enter the matrix dimension, n: ');</span>
+n = 3;
+a = zeros(n,n);
+x = zeros(1,n);
+y = zeros(1,n);
+<span class="comment">%tol = input('Enter the tolerance, tol: ');</span>
+tol = 0.00001;
+<span class="comment">%max = input('Enter maximum number of iterations, max: ');</span>
+max = 100;
+
+a = [1 2 0; -2 1 2; 1 3 1];
+x = [1 1 1];
+
+k = 1; lp = 1;
+amax = abs(x(1));
+<span class="keyword">for</span> i = 2 : n
+<span class="keyword">if</span> abs(x(i)) &gt; amax
+    amax = abs(x(i));
+    lp = i;
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">for</span> i = 1 : n
+x(i) = x(i)/amax;
+<span class="keyword">end</span>
+
+fprintf(<span class="string">'\n\n  Item    Eigenvalue     ............Eigenvectores............\n'</span>);
+<span class="keyword">while</span> k &lt;= max
+  <span class="keyword">for</span> i = 1 : n
+     y(i) = 0;
+     <span class="keyword">for</span> j = 1 : n
+       y(i) = y(i) + a(i,j) * x(j);
+     <span class="keyword">end</span>
+  <span class="keyword">end</span>
+  ymu = y(lp);
+  lp = 1;
+  amax = abs(y(1));
+  <span class="keyword">for</span> i = 2 : n
+     <span class="keyword">if</span> abs(y(i)) &gt; amax
+        amax = abs(y(i));
+        lp = i;
+     <span class="keyword">end</span>
+  <span class="keyword">end</span>
+  <span class="keyword">if</span> amax &lt;= 0
+     fprintf(<span class="string">'0 eigenvalue - select another '</span>);
+     fprintf(<span class="string">'initial vector and begin again\n'</span>);
+  <span class="keyword">else</span>
+       err = 0;
+       <span class="keyword">for</span> i = 1 : n
+          t = y(i)/y(lp);
+          <span class="keyword">if</span> abs(x(i)-t) &gt; err
+            err = abs(x(i)-t);
+          <span class="keyword">end</span>
+          x(i) = t;
+       <span class="keyword">end</span>
+       fprintf(<span class="string">'%4d     %11.8f'</span>, k, ymu);
+       <span class="keyword">for</span> i = 1 : n
+         fprintf(<span class="string">'   %11.8f'</span>, x(i));
+       <span class="keyword">end</span>
+       fprintf(<span class="string">'\n'</span>);
+       <span class="keyword">if</span> err &lt;= tol
+          fprintf(<span class="string">'\n\nThe eigenvalue after %d iterations is: %11.8f \n'</span>,k, ymu);
+          fprintf(<span class="string">'The corresponding eigenvector is: \n'</span>);
+          <span class="keyword">for</span> i = 1 : n
+             fprintf(<span class="string">'%11.8f \n'</span>, x(i));
+          <span class="keyword">end</span>
+          fprintf(<span class="string">'\n'</span>);
+          <span class="keyword">break</span>;
+       <span class="keyword">end</span>
+       k = k+1;
+   <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">if</span> k &gt; max
+fprintf(<span class="string">'Method did not converge within %d iterations\n'</span>, m);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">
+
+  Item    Eigenvalue     ............Eigenvectores............
+   1      3.00000000    0.60000000    0.20000000    1.00000000
+   2      2.20000000    0.45454545    0.45454545    1.00000000
+   3      2.81818182    0.48387097    0.54838710    1.00000000
+   4      3.12903226    0.50515464    0.50515464    1.00000000
+   5      3.02061856    0.50170648    0.49488055    1.00000000
+   6      2.98634812    0.49942857    0.49942857    1.00000000
+   7      2.99771429    0.49980938    0.50057186    1.00000000
+   8      3.00152497    0.50006351    0.50006351    1.00000000
+   9      3.00025403    0.50002117    0.49993650    1.00000000
+  10      2.99983066    0.49999294    0.49999294    1.00000000
+  11      2.99997177    0.49999765    0.50000706    1.00000000
+  12      3.00001882    0.50000078    0.50000078    1.00000000
+
+
+The eigenvalue after 12 iterations is:  3.00001882 
+The corresponding eigenvector is: 
+ 0.50000078 
+ 0.50000078 
+ 1.00000000 
+
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2022a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%n = input('Enter the matrix dimension, n: ');
+n = 3;
+a = zeros(n,n);
+x = zeros(1,n);
+y = zeros(1,n);
+%tol = input('Enter the tolerance, tol: ');
+tol = 0.00001;
+%max = input('Enter maximum number of iterations, max: ');
+max = 100;
+
+a = [1 2 0; -2 1 2; 1 3 1];
+x = [1 1 1];
+
+k = 1; lp = 1;
+amax = abs(x(1));
+for i = 2 : n
+if abs(x(i)) > amax
+    amax = abs(x(i));
+    lp = i;
+end
+end 
+for i = 1 : n
+x(i) = x(i)/amax;
+end 
+
+fprintf('\n\n  Item    Eigenvalue     ............Eigenvectores............\n');
+while k <= max
+  for i = 1 : n
+     y(i) = 0;
+     for j = 1 : n
+       y(i) = y(i) + a(i,j) * x(j);
+     end
+  end
+  ymu = y(lp);
+  lp = 1;
+  amax = abs(y(1));
+  for i = 2 : n
+     if abs(y(i)) > amax
+        amax = abs(y(i));
+        lp = i;
+     end
+  end
+  if amax <= 0
+     fprintf('0 eigenvalue - select another ');
+     fprintf('initial vector and begin again\n');
+  else
+       err = 0;
+       for i = 1 : n
+          t = y(i)/y(lp);
+          if abs(x(i)-t) > err
+            err = abs(x(i)-t);
+          end
+          x(i) = t;
+       end
+       fprintf('%4d     %11.8f', k, ymu);
+       for i = 1 : n
+         fprintf('   %11.8f', x(i));
+       end
+       fprintf('\n');
+       if err <= tol
+          fprintf('\n\nThe eigenvalue after %d iterations is: %11.8f \n',k, ymu);
+          fprintf('The corresponding eigenvector is: \n');
+          for i = 1 : n
+             fprintf('%11.8f \n', x(i));
+          end
+          fprintf('\n');
+          break;
+       end
+       k = k+1;
+   end
+end
+if k > max
+fprintf('Method did not converge within %d iterations\n', m);
+end
+##### SOURCE END #####
+--></body></html>
